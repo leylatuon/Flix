@@ -10,14 +10,17 @@ import AlamofireImage
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-
-
+   
+    
     @IBOutlet weak var tableView: UITableView!
+    
     var movies = [[String:Any]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+       
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -39,7 +42,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.movies = dataDictionary["results"] as! [[String:Any]] //cast as a dictionary
             
             self.tableView.reloadData()
-            print(dataDictionary)
+           // print(dataDictionary)
             
            }
         }
@@ -66,6 +69,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.posterView.af.setImage(withURL: posterUrl!)
         
         return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        print("Loading up the details screen")
+        //find selected movie
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)!
+        let movie = movies[indexPath.row]
+        
+        //pass selected move to the details view controller
+        let detailsViewController = segue.destination as! MovieDetailsViewController
+        detailsViewController.movie = movie
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 
